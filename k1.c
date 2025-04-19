@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-// gcc k1.c -o k1.o -lm -O3
+// gcc k1.c -o k1.o -fopenmp -lm -O3
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
