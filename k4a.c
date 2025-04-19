@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     }
 
     #pragma omp parallel for
-    for (int i = 2; i * i <= n; i++) {
+    for (int i = 2; i <= sqrt_n; i++) {
         if (primeArray[i]) {
             int firstMultiple = (m / i);
             if (firstMultiple <= 1) {
