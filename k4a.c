@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    clock_t start_time = omp_get_wtime();
+    double start_time = omp_get_wtime();
 
     int range = n - m + 1;
     bool* result = (bool*)malloc(range * sizeof(bool));
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     // }
     // printf("\n");
 
-    clock_t end_time = omp_get_wtime();
+    double end_time = omp_get_wtime();
     printf("Czas przetwarzania: %.6f sekund\n", end_time - start_time);
 
     free(result);
