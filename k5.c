@@ -6,19 +6,25 @@
 #include <time.h>
 #include <omp.h>
 
-// gcc k1.c -o k1.o -lm -fopenmp -O3
+// gcc k5.c -o k5.o -lm -fopenmp -O3
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        printf("Użycie: %s <dolny_zakres> <gorny_zakres>\n", argv[0]);
+    if (argc != 4) {
+        printf("Użycie: %s <dolny_zakres> <gorny_zakres> <rozmiar_bloku>\n", argv[0]);
         return 1;
     }
 
     int m = atoi(argv[1]);
     int n = atoi(argv[2]);
+    int blockSize = atoi(argv[3]);
 
     if (m > n || m < 2) {
         printf("Zakres nieprawidłowy. Upewnij się, że m >= 2 i m <= n.\n");
+        return 1;
+    }
+
+    if (blockSize <= 0) {
+        printf("Rozmiar bloku musi być większy od zera.\n");
         return 1;
     }
 
@@ -40,7 +46,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    int blockSize = 1000;
     int numberOfBlocks = (n - m) / blockSize;
 
     if ((n - m) % blockSize != 0) {

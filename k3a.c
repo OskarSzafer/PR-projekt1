@@ -8,16 +8,22 @@
 // gcc k3a.c -o k3a.o -fopenmp -lm -O3
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        printf("Użycie: %s <dolny_zakres> <gorny_zakres>\n", argv[0]);
+    if (argc != 4) {
+        printf("Użycie: %s <dolny_zakres> <gorny_zakres> <rozmiar_bloku>\n", argv[0]);
         return 1;
     }
 
     int m = atoi(argv[1]);
     int n = atoi(argv[2]);
+    int BLOCK_SIZE = atoi(argv[3]);
 
     if (m > n || m < 2) {
         printf("Zakres nieprawidłowy. Upewnij się, że m >= 2 i m <= n.\n");
+        return 1;
+    }
+
+    if (BLOCK_SIZE <= 0) {
+        printf("Rozmiar bloku musi być większy od zera.\n");
         return 1;
     }
 
@@ -55,9 +61,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Define block size for better cache locality
-    const int BLOCK_SIZE = 8192;
-    
     // Calculate number of blocks needed
     int num_blocks = (range + BLOCK_SIZE - 1) / BLOCK_SIZE;
     
