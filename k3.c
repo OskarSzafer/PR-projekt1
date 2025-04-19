@@ -55,13 +55,13 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    printf("Liczby pierwsze w zakresie [%d, %d]:\n", m, n);
-    for (int i = 0; i < range; i++) {
-        if (result[i]) {
-            printf("%d ", i + m);
-        }
-    }
-    printf("\n");
+    // printf("Liczby pierwsze w zakresie [%d, %d]:\n", m, n);
+    // for (int i = 0; i < range; i++) {
+    //     if (result[i]) {
+    //         printf("%d ", i + m);
+    //     }
+    // }
+    // printf("\n");
 
     double end_time = omp_get_wtime();
     printf("Czas przetwarzania: %.6f sekund\n", end_time - start_time);

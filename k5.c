@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <time.h>
+#include <omp.h>
 
 // gcc k1.c -o k1.o -lm -fopenmp -O3
 
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    clock_t start = clock();
+    clock_t start_time = omp_get_wtime();
 
     int range = n - m + 1;
     bool* result = (bool*)malloc(range * sizeof(bool));
@@ -75,17 +76,16 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    printf("Liczby pierwsze w zakresie [%d, %d]:\n", m, n);
-    for (int i = 0; i < range; i++) {
-        if (result[i]) {
-            printf("%d ", i + m);
-        }
-    }
-    printf("\n");
+    // printf("Liczby pierwsze w zakresie [%d, %d]:\n", m, n);
+    // for (int i = 0; i < range; i++) {
+    //     if (result[i]) {
+    //         printf("%d ", i + m);
+    //     }
+    // }
+    // printf("\n");
 
-    clock_t end = clock();
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Czas przetwarzania: %.6f sekund\n", time_spent);
+    clock_t end_time = omp_get_wtime();
+    printf("Czas przetwarzania: %.6f sekund\n", end_time - start_time);
 
     free(result);
     free(primeArray);
