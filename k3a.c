@@ -27,21 +27,35 @@ int main(int argc, char* argv[]) {
     bool* result = (bool*)malloc(range * sizeof(bool));
     memset(result, true, range * sizeof(bool));
 
-    bool* primeArray = (bool*)malloc((int)sqrt(n) + 1 * sizeof(bool));
-    memset(primeArray, true, ((int)sqrt(n) + 1) * sizeof(bool));
+    // Initialize all numbers in range as potential primes
+    // (we'll mark non-primes later)
+    for (int i = 0; i < range; i++) {
+        result[i] = true;
+    }
 
-    // Generate primes up to sqrt(n)
-    for (int i = 2; i * i <= (int)sqrt(n); i++) {
+    // Special case for 1 if it's in the range
+    if (m == 1) {
+        result[0] = false;  // 1 is not a prime
+    }
+
+    // Generate primes up to sqrt(n) using sieve
+    int sqrt_n = (int)sqrt(n);
+    bool* primeArray = (bool*)malloc((sqrt_n + 1) * sizeof(bool));
+    for (int i = 0; i <= sqrt_n; i++) {
+        primeArray[i] = true;
+    }
+    
+    // Mark non-primes in the primeArray (standard sieve of Eratosthenes)
+    primeArray[0] = primeArray[1] = false;
+    for (int i = 2; i * i <= sqrt_n; i++) {
         if (primeArray[i]) {
-            for (int j = i * i; j <= (int)sqrt(n); j += i) {
+            for (int j = i * i; j <= sqrt_n; j += i) {
                 primeArray[j] = false;
             }
         }
     }
 
     // Define block size for better cache locality
-    // A good block size is often related to cache size, 
-    // but a few thousand elements usually works well
     const int BLOCK_SIZE = 8192;
     
     // Calculate number of blocks needed
@@ -55,12 +69,15 @@ int main(int argc, char* argv[]) {
         if (block_end > n) block_end = n;
         
         // Process each prime number for the current block
-        for (int i = 2; i * i <= n; i++) {
+        for (int i = 2; i <= sqrt_n; i++) {
             if (primeArray[i]) {
                 // Find the first multiple of i in the current block
                 int firstMultiple = (block_start / i) * i;
                 if (firstMultiple < block_start) {
                     firstMultiple += i;
+                }
+                if (firstMultiple == i) {
+                    firstMultiple += i;  // Skip the prime itself
                 }
                 
                 // Mark all multiples of i in the current block as non-prime
@@ -73,12 +90,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Special case for 1 if it's in the range
-    if (m == 1) {
-        result[0] = false;  // 1 is not a prime
-    }
-
-    // Uncomment to print the prime numbers
     // printf("Liczby pierwsze w zakresie [%d, %d]:\n", m, n);
     // for (int i = 0; i < range; i++) {
     //     if (result[i]) {
