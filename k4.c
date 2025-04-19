@@ -6,7 +6,7 @@
 #include <time.h>
 #include <omp.h>  
 
-// Compile: gcc k4.c -o k4.o -lm -fopenmp -O3
+//gcc k1.c -o k1.o -lm -fopenmp -O3
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
