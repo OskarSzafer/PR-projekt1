@@ -1,0 +1,12 @@
+➜  PR-projekt1 git:(main) ✗ ./k3a.o 2 100000000 524288
+Czas przetwarzania: 0.141656 sekund
+➜  PR-projekt1 git:(main) ✗ ./k3.o 2 100000000        
+Czas przetwarzania: 0.690426 sekund
+➜  PR-projekt1 git:(main) ✗ ./k3a.o 50000000 100000000 524288
+Czas przetwarzania: 0.072421 sekund
+➜  PR-projekt1 git:(main) ✗ ./k3.o 50000000 100000000        
+Czas przetwarzania: 0.328505 sekund
+➜  PR-projekt1 git:(main) ✗ ./k3a.o 2 50000000 524288        
+Czas przetwarzania: 0.071178 sekund
+➜  PR-projekt1 git:(main) ✗ ./k3.o 2 50000000        
+Czas przetwarzania: 0.308988 sekund

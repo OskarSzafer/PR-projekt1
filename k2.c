@@ -8,13 +8,30 @@
 // gcc k2.c -o k2.o -fopenmp -lm -O3
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        printf("Użycie: %s <dolny_zakres> <gorny_zakres>\n", argv[0]);
+    if (argc < 3 || argc > 4) {
+        printf("Użycie: %s <dolny_zakres> <gorny_zakres> [chunk_size]\n", argv[0]);
         return 1;
     }
 
     int m = atoi(argv[1]);
     int n = atoi(argv[2]);
+    
+    // Default chunk size is 2
+    int chunk_size = 2;
+    bool dynamic_schedule = false;
+    
+    // Process the third argument if provided
+    if (argc == 4) {
+        if (strcmp(argv[3], "dynamic") == 0) {
+            dynamic_schedule = true;
+        } else {
+            chunk_size = atoi(argv[3]);
+            if (chunk_size <= 0) {
+                printf("Chunk size musi być liczbą dodatnią lub słowem 'dynamic'.\n");
+                return 1;
+            }
+        }
+    }
 
     if (m > n || m < 2) {
         printf("Zakres nieprawidłowy. Upewnij się, że m >= 2 i m <= n.\n");
@@ -40,12 +57,24 @@ int main(int argc, char* argv[]) {
 
     #pragma omp parallel
     {
-        #pragma omp for
-        for (int i = m; i <= n; i++) {
-            for (int j = 2; j * j <= i; j++) {
-                if (primeArray[j] == true && i % j == 0) {
-                    result[i - m] = false;
-                    break;
+        if (dynamic_schedule) {
+            #pragma omp for schedule(dynamic)
+            for (int i = m; i <= n; i++) {
+                for (int j = 2; j * j <= i; j++) {
+                    if (primeArray[j] == true && i % j == 0) {
+                        result[i - m] = false;
+                        break;
+                    }
+                }
+            }
+        } else {
+            #pragma omp for schedule(static, chunk_size)
+            for (int i = m; i <= n; i++) {
+                for (int j = 2; j * j <= i; j++) {
+                    if (primeArray[j] == true && i % j == 0) {
+                        result[i - m] = false;
+                        break;
+                    }
                 }
             }
         }
@@ -61,6 +90,12 @@ int main(int argc, char* argv[]) {
 
     double end_time = omp_get_wtime();
     printf("Czas przetwarzania: %.6f sekund\n", end_time - start_time);
+    
+    if (dynamic_schedule) {
+        printf("Użyto harmonogramu: dynamic\n");
+    } else {
+        printf("Użyto harmonogramu: static z rozmiarem bloku %d\n", chunk_size);
+    }
 
     free(result);
     free(primeArray);

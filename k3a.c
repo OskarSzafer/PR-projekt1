@@ -7,6 +7,8 @@
 
 // gcc k3a.c -o k3a.o -fopenmp -lm -O3
 
+// 524288 optymalny rozmiar bloku
+
 int main(int argc, char* argv[]) {
     if (argc != 4) {
         printf("Użycie: %s <dolny_zakres> <gorny_zakres> <rozmiar_bloku>\n", argv[0]);

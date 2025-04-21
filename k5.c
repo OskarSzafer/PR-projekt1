@@ -8,6 +8,8 @@
 
 // gcc k5.c -o k5.o -lm -fopenmp -O3
 
+// 131072 optymalny rozmiar bloku
+
 int main(int argc, char* argv[]) {
     if (argc != 4) {
         printf("Użycie: %s <dolny_zakres> <gorny_zakres> <rozmiar_bloku>\n", argv[0]);
@@ -53,7 +55,7 @@ int main(int argc, char* argv[]) {
     }
 
     #pragma omp parallel for
-    for (int i = 0; i < numberOfBlocks; i++) {
+    for (int i = 0; i < numberOfBlocks; i++) { 
         int low = m + i * blockSize;
         int high = low + blockSize;
         if (high > n) {
